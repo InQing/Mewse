@@ -22,3 +22,15 @@ rustc-ice-*.txt
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# design-taste-frontend 技能生成的临时缓存（Chrome 配置、ML 模型、日志、数据库）
+.taste-skill/
+prototype/.taste-skill/
+
+# 常见系统/编辑器临时文件
+.DS_Store
+Thumbs.db
+*.log
+
+# 依赖目录（如后续引入）
+node_modules/

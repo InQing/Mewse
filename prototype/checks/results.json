@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "errors": [],
+  "screenshots": [
+    "calendar.png",
+    "conflict.png",
+    "focus.png",
+    "history.png",
+    "library-dark.png",
+    "library-mobile.png",
+    "library.png",
+    "publish.png",
+    "search-empty.png",
+    "search.png",
+    "settings.png",
+    "split.png",
+    "sync-connected.png",
+    "sync-offline.png",
+    "wordcount.png",
+    "workbench-1024.png",
+    "workbench-320.png",
+    "workbench-mobile.png",
+    "workbench.png"
+  ]
+}
