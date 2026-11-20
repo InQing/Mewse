@@ -52,6 +52,8 @@
       <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
       <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2a10 10 0 0 0 0 20 1.7 1.7 0 0 0 1.7-1.7c0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1a1.7 1.7 0 0 1 1.7-1.7H16a6 6 0 0 0 6-6c0-4.4-4.5-8.4-10-8.4Z"/></symbol>
       <symbol id="i-restore" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.4 6.4M3 12a9 9 0 0 1 15.4-6.4"/><path d="M21 4v5h-5M3 20v-5h5"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.6 3 8.1 7 9 4-.9 7-4.4 7-9V6l-7-3Z"/><path d="m9.5 12 1.8 1.8 3.5-3.8"/></symbol>
     </defs>
   </svg>
 
@@ -64,7 +66,17 @@
         <div class="library-header-right"><button class="tool-button theme-trigger" data-action="theme" aria-label="切换阅读与界面主题" aria-expanded="false" title="当前主题：羊皮纸（点击切换）"><svg class="icon small"><use href="#i-palette"/></svg><span>主题</span><span class="theme-dot" aria-hidden="true"></span></button></div>
       </header>
       <div class="library-content">
-        <button class="library-kicker" data-action="workspace" title="点击切换书库目录"><span class="tiny-dot"></span>我的书库<span class="path">/ Documents / Mewse</span></button>
+        <div class="library-workspace-bar">
+          <button class="library-kicker" data-action="workspace" title="管理书库位置、切换书库或从云端导入"><span class="tiny-dot"></span>我的书库<span class="path" id="libraryWorkspacePath">/ Documents / Mewse</span></button>
+          <div class="library-sync-group">
+            <button class="library-sync-pill" id="librarySyncStatus" data-action="sync" data-sync="connected" aria-expanded="false" aria-haspopup="dialog" title="查看云备份路径、同步记录与设置">
+              <svg class="icon small" aria-hidden="true"><use href="#i-cloud"/></svg>
+              <span class="sync-dot" aria-hidden="true"></span>
+              <span class="library-sync-text" id="librarySyncText">云备份已同步</span>
+            </button>
+            <button class="icon-button small-button library-sync-btn" data-action="quick-sync" aria-label="立即检查云端更新并同步" title="立即同步"><svg class="icon small"><use href="#i-refresh"/></svg></button>
+          </div>
+        </div>
         <div class="library-title-row"><div><h2 id="libraryTitle">故事，从这里继续。</h2><p>上午好，今天也写一点吧。</p></div><div class="library-actions"><button class="btn btn--secondary" data-action="import"><svg class="icon"><use href="#i-upload"/></svg>导入作品</button><button class="btn btn--primary" data-action="new-book"><svg class="icon"><use href="#i-plus"/></svg>新建作品</button></div></div>
         <div class="library-meta"><h2>全部作品 <span>3</span></h2><button class="text-button" data-action="calendar"><svg class="icon"><use href="#i-calendar"/></svg>码字日历<svg class="icon small"><use href="#i-arrow"/></svg></button></div>
         <div class="book-grid">
@@ -140,7 +152,7 @@
         </section>
       </div>
 
-      <footer class="statusbar"><div class="status-left"><span class="save-state" id="saveState"><svg class="icon small"><use href="#i-check"/></svg>已保存</span><span class="status-divider"></span><span class="sync-indicator" id="syncStatus" data-sync="connected" tabindex="0" role="status" aria-label="已连接到云端，本地修改将同步到云端"><svg class="icon small" aria-hidden="true"><use href="#i-cloud"/></svg><span class="sync-dot" aria-hidden="true"></span><span class="sync-tooltip" role="tooltip"><span class="sync-tip-connected">已连接到云端，本地修改将同步到云端</span><span class="sync-tip-offline"><strong>未连接云端</strong><small>当前书库目录未开启云盘同步</small></span></span></span></div><div class="status-right"><button class="word-count" data-action="wordcount">本章 <strong id="wordCount">0</strong> 字<svg class="icon small"><use href="#i-chevron"/></svg></button><span class="status-divider"></span><span class="today-count">今日 +<span id="todayCount">1,284</span></span><button class="icon-button small-button more-status" data-action="export" aria-label="更多章节操作"><svg class="icon small"><use href="#i-more"/></svg></button></div></footer>
+      <footer class="statusbar"><div class="status-left"><span class="save-state" id="saveState"><svg class="icon small"><use href="#i-check"/></svg>已保存</span><span class="status-divider"></span><button type="button" class="sync-indicator" id="syncStatus" data-action="sync" data-sync="connected" aria-expanded="false" aria-haspopup="dialog" aria-label="已连接到云端，本地修改将自动增量备份"><svg class="icon small" aria-hidden="true"><use href="#i-cloud"/></svg><span class="sync-dot" aria-hidden="true"></span><span class="sync-tooltip" role="tooltip"><span class="sync-tip-connected" id="syncTipConnected">已连接到云端，本地修改将自动备份</span><span class="sync-tip-offline"><strong id="syncTipTitle">未连接云端</strong><small id="syncTipDetail">尚未关联云备份目录，点击设置</small></span></span></button></div><div class="status-right"><button class="word-count" data-action="wordcount">本章 <strong id="wordCount">0</strong> 字<svg class="icon small"><use href="#i-chevron"/></svg></button><span class="status-divider"></span><span class="today-count">今日 +<span id="todayCount">1,284</span></span><button class="icon-button small-button more-status" data-action="export" aria-label="更多章节操作"><svg class="icon small"><use href="#i-more"/></svg></button></div></footer>
       <button class="focus-exit" data-action="focus"><svg class="icon"><use href="#i-focus"/></svg>退出专注<span>Esc</span></button>
     </section>
   </main>
@@ -161,7 +173,7 @@
   <aside class="drawer history-drawer" id="historyDrawer" aria-labelledby="historyTitle" hidden>
     <div class="drawer-header"><div><span class="eyebrow">雾中的船鸣</span><h2 id="historyTitle">历史快照</h2></div><button class="icon-button" data-close aria-label="关闭历史快照"><svg class="icon"><use href="#i-close"/></svg></button></div>
     <div class="snapshot-create"><button class="btn btn--secondary full-button" style="margin-top:0" data-action="create-snapshot"><svg class="icon"><use href="#i-plus"/></svg>新建快照</button></div>
-    <div class="snapshot-list"><span class="list-label">今天</span><button class="snapshot-item" data-action="compare"><span class="snapshot-marker manual"><svg class="icon small"><use href="#i-book"/></svg></span><span><strong>登灯塔之前</strong><span class="snapshot-meta">手动快照 · 10:24</span></span><span class="snapshot-size">2,846 字</span></button><button class="snapshot-item" data-action="compare"><span class="snapshot-marker"><svg class="icon small"><use href="#i-history"/></svg></span><span><strong>自动保存的历史版本</strong><span class="snapshot-meta">自动快照 · 09:48</span></span><span class="snapshot-size">2,592 字</span></button><span class="list-label older">11 月 16 日</span><button class="snapshot-item" data-action="compare"><span class="snapshot-marker"><svg class="icon small"><use href="#i-history"/></svg></span><span><strong>完成初稿</strong><span class="snapshot-meta">手动快照 · 22:16</span></span><span class="snapshot-size">2,217 字</span></button></div>
+    <div class="snapshot-list" id="snapshotList"><span class="list-label">今天</span><button class="snapshot-item" data-action="compare" data-snapshot-type="manual"><span class="snapshot-marker manual"><svg class="icon small"><use href="#i-book"/></svg></span><span><strong>登灯塔之前</strong><span class="snapshot-meta">手动快照 · 10:24</span></span><span class="snapshot-size">2,846 字</span></button><button class="snapshot-item" data-action="compare" data-snapshot-type="auto"><span class="snapshot-marker"><svg class="icon small"><use href="#i-history"/></svg></span><span><strong>自动保存的历史版本</strong><span class="snapshot-meta">自动快照 · 09:48</span></span><span class="snapshot-size">2,592 字</span></button><span class="list-label older">11 月 16 日</span><button class="snapshot-item" data-action="compare" data-snapshot-type="conflict"><span class="snapshot-marker conflict"><svg class="icon small"><use href="#i-shield"/></svg></span><span><strong>冲突仲裁前自动留存</strong><span class="snapshot-meta"><span class="snapshot-badge">云端冲突备份</span> · 22:30</span></span><span class="snapshot-size">2,240 字</span></button><button class="snapshot-item" data-action="compare" data-snapshot-type="manual"><span class="snapshot-marker"><svg class="icon small"><use href="#i-history"/></svg></span><span><strong>完成初稿</strong><span class="snapshot-meta">手动快照 · 22:16</span></span><span class="snapshot-size">2,217 字</span></button></div>
   </aside>
 
   <aside class="drawer trash-drawer" id="trashDrawer" aria-labelledby="trashTitle" hidden>
@@ -197,13 +209,55 @@
     <div class="popover-header"><h2 id="wordTitle">本章字数</h2><button class="icon-button" data-close aria-label="关闭字数统计"><svg class="icon small"><use href="#i-close"/></svg></button></div><div class="primary-stat"><strong id="detailCount">0</strong><span>有效字数</span></div><dl class="stat-list"><div><dt>纯汉字（不含标点）</dt><dd id="chineseCount">0</dd></div><div><dt>本章今日净增</dt><dd class="positive">+1,284</dd></div><div><dt>全书总字数</dt><dd>128,460</dd></div></dl><button class="btn btn--secondary full-button" data-action="calendar"><svg class="icon"><use href="#i-calendar"/></svg>查看码字日历</button>
   </section>
 
-  <section class="modal" id="calendarModal" role="dialog" aria-modal="true" aria-labelledby="calendarTitle" hidden>
+  <section class="floating-panel sync-panel" id="syncPanel" role="dialog" aria-labelledby="syncPanelTitle" hidden>
+    <div class="popover-header">
+      <div class="sync-panel-heading">
+        <h2 id="syncPanelTitle">云备份与同步</h2>
+        <span class="sync-state-badge" id="syncBadge" data-sync="connected"><span class="sync-dot" aria-hidden="true"></span><span id="syncBadgeText">已同步</span></span>
+      </div>
+      <button class="icon-button" data-close aria-label="关闭云备份与同步"><svg class="icon small"><use href="#i-close"/></svg></button>
+    </div>
+    <div id="syncPanelBody"></div>
+  </section>
+
+  <section class="modal calendar-modal" id="calendarModal" role="dialog" aria-modal="true" aria-labelledby="calendarTitle" hidden>
     <div class="modal-header"><h2 id="calendarTitle">码字日历</h2><button class="icon-button" data-close aria-label="关闭码字日历"><svg class="icon"><use href="#i-close"/></svg></button></div><div class="calendar-summary"><div><strong>28</strong><span>连续创作天数</span></div><div><strong>32,618</strong><span>本月码字</span></div><div><strong>247,583</strong><span>今年累计</span></div><label class="calendar-scope">统计范围<select><option>全部作品</option><option>雾港来信</option><option>山间邮局</option></select></label></div><div class="heatmap-wrap"><div class="heatmap-months"><span>1月</span><span>2月</span><span>3月</span><span>4月</span><span>5月</span><span>6月</span><span>7月</span><span>8月</span><span>9月</span><span>10月</span><span>11月</span><span>12月</span></div><div class="heatmap" id="heatmap" aria-label="年度每日码字热力图"></div><div class="heatmap-legend"><span>今年已写 198 天</span><span aria-label="由浅到深表示当日码字由少到多"><i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i></span></div></div>
   </section>
 
   <section class="modal small-modal" id="actionModal" role="dialog" aria-modal="true" aria-labelledby="actionTitle" hidden><div class="modal-header"><h2 id="actionTitle">新建章节</h2><button class="icon-button" data-close aria-label="关闭对话框"><svg class="icon"><use href="#i-close"/></svg></button></div><div id="actionModalBody"></div></section>
 
-  <section class="modal conflict-modal" id="conflictModal" role="dialog" aria-modal="true" aria-labelledby="conflictTitle" hidden><div class="modal-header"><div><span class="eyebrow warning-text">检测到同时修改</span><h2 id="conflictTitle">选择要保留的版本</h2></div><button class="icon-button" data-close aria-label="暂不处理版本冲突"><svg class="icon"><use href="#i-close"/></svg></button></div><p class="modal-intro">本章在本地和外部编辑器中都有修改。处理前，任何版本都不会被覆盖。</p><div class="version-grid"><div><span class="version-label">此设备 · 刚刚</span><p>沈舟是在第三声船鸣响起时醒来的。</p><p>他走到窗边，看见一个穿深色雨衣的人站在街角。</p></div><div><span class="version-label">外部文件 · 11:36</span><p>沈舟是在第三声船鸣响起时醒来的。</p><p><mark>窗外有人叫他的名字，那声音像极了父亲。</mark></p></div></div><div class="conflict-actions"><button class="btn btn--secondary" data-conflict="local">保留本地版本</button><button class="btn btn--secondary" data-conflict="external">采用外部版本</button><button class="btn btn--primary" data-conflict="draft">另存到草稿箱</button></div></section>
+  <section class="modal cloud-update-modal" id="cloudUpdateModal" role="dialog" aria-modal="true" aria-labelledby="cloudUpdateTitle" hidden>
+    <div class="modal-header">
+      <div><span class="eyebrow">打开书库 · 云端检测</span><h2 id="cloudUpdateTitle">检测到云端有新的改动</h2></div>
+      <button class="icon-button" data-close aria-label="暂不更新"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <p class="modal-intro">以下文件在本地自上次同步后未改动，云备份目录中存在更新版本。拉取覆盖前会自动为本地旧版留存历史快照。</p>
+    <div class="update-list" id="cloudUpdateList"></div>
+    <div class="modal-actions">
+      <button class="btn btn--secondary" data-close>稍后处理</button>
+      <button class="btn btn--primary" data-action="apply-cloud-updates" id="applyCloudUpdatesBtn">从云端更新</button>
+    </div>
+  </section>
+
+  <section class="modal conflict-modal" id="conflictModal" role="dialog" aria-modal="true" aria-labelledby="conflictTitle" hidden>
+    <div class="modal-header">
+      <div><span class="eyebrow warning-text" id="conflictEyebrow">检测到双端分叉 · 005 雾中的船鸣</span><h2 id="conflictTitle">选择要保留的版本</h2></div>
+      <button class="icon-button" data-close aria-label="暂不处理版本冲突"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <p class="modal-intro" id="conflictIntro">自上次同步后，本地书库与云备份目录各自修改了本章。处理完成前，任何版本都不会被静默覆盖。</p>
+    <div class="version-grid">
+      <div><span class="version-label" id="conflictLocalLabel">此设备（本地版本） · 刚刚</span><div id="conflictLocalBody"><p>沈舟是在第三声船鸣响起时醒来的。</p><p>他走到窗边，看见一个穿深色雨衣的人站在街角。</p></div></div>
+      <div><span class="version-label" id="conflictRemoteLabel">云端备份（OneDrive） · 11:36</span><div id="conflictRemoteBody"><p>沈舟是在第三声船鸣响起时醒来的。</p><p><mark>窗外有人叫他的名字，那声音像极了父亲。</mark></p></div></div>
+    </div>
+    <div class="conflict-footer">
+      <p class="conflict-note">选择「保留本地版本」或「采用云端版本」时，<strong>未被采用的一方将自动存入本章历史快照</strong>；「另存冲突副本」会把冲突内容保存到草稿箱。</p>
+      <div class="conflict-actions">
+        <button class="btn btn--secondary" data-conflict="local">保留本地版本</button>
+        <button class="btn btn--secondary" data-conflict="cloud">采用云端版本</button>
+        <button class="btn btn--primary" data-conflict="draft">另存冲突副本</button>
+      </div>
+    </div>
+  </section>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden><span class="toast-icon"><svg class="icon"><use href="#i-check"/></svg></span><span id="toastMessage"></span><button data-close aria-label="关闭提示"><svg class="icon small"><use href="#i-close"/></svg></button></div>
 
